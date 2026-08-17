@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://juancho.github.io", // o tu dominio
   devToolbar: {
     enabled: false,
   },
@@ -12,7 +13,6 @@ export default defineConfig({
     port: 4321,
   },
   vite: {
-    // @ts-ignore
     plugins: [tailwindcss()],
     server: {
       allowedHosts: ["tui-portfolio-dev.tuiportfolio.orb.local", ".orb.local"],
