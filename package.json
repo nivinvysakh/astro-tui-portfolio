@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "astro": "^7.2.2",
-    "canvas-confetti": "1.6.0"
+    "canvas-confetti": "1.9.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
