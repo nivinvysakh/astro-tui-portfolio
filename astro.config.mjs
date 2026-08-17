@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://juancho.github.io", // o tu dominio
+  site: "https://juancho.github.io", 
   devToolbar: {
     enabled: false,
   },
