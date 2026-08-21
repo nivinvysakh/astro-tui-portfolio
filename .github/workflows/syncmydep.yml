@@ -1,0 +1,42 @@
+name: Dependency Sync & Audit
+
+on:
+  schedule:
+    - cron: '0 8 * * 1' # Runs every Monday at 08:00 UTC
+  workflow_dispatch:     # Allows manual trigger from GitHub UI
+  push:
+    paths:
+      - 'package.json'
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run SyncMyDep
+        uses: nivinvysakh/syncmydep@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-manager: 'auto'
+          sync-lockfile: 'true'
+          fix-audit: 'true'
+          audit-level: 'moderate'
+          pr-branch: 'syncmydep/dependency-fix'
+          pr-title: 'chore(deps): synchronize package.json and lockfile'
+          pr-labels: 'dependencies, automated-pr'
