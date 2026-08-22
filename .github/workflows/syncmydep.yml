@@ -1,14 +1,8 @@
-name: Dependency Sync & Audit
+name: SyncMyDep on PR Comment
 
 on:
-  schedule:
-    - cron: '0 8 * * 1' # Runs every Monday at 08:00 UTC
-  workflow_dispatch:     # Allows manual trigger from GitHub UI
-  push:
-    paths:
-      - 'package.json'
-    branches:
-      - main
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: write
@@ -16,8 +10,13 @@ permissions:
   issues: write
 
 jobs:
-  sync:
+  sync-pr-comment:
+    name: Sync Dependencies on PR Comment
+    if: >-
+      github.event.issue.pull_request != null &&
+      (contains(github.event.comment.body, 'syncdep') || contains(github.event.comment.body, '/syncdep'))
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,10 +32,6 @@ jobs:
         uses: nivinvysakh/syncmydep@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: 'auto'
+          comment-trigger: 'syncdep'
           sync-lockfile: 'true'
           fix-audit: 'true'
-          audit-level: 'moderate'
-          pr-branch: 'syncmydep/dependency-fix'
-          pr-title: 'chore(deps): synchronize package.json and lockfile'
-          pr-labels: 'dependencies, automated-pr'
