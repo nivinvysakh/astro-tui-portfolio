@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://nivinvysakh.github.io",
+  site: "https://nivinvysakh.github.io/astro-tui-portfolio/",
   devToolbar: {
     enabled: false,
   },
