@@ -94,6 +94,30 @@ import { ALL_THEMES } from "../config/themeConfig";
       </button>
 
       <button
+        id="trigger-radio-btn"
+        title="Open Retro Lo-Fi & Chiptune Radio Player"
+        class="hidden sm:flex px-2 py-1 border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--accent)] text-[var(--accent)] font-bold cursor-pointer items-center gap-1"
+      >
+        <span>📻</span> <span class="hidden md:inline">Radio</span>
+      </button>
+
+      <button
+        id="trigger-pong-btn"
+        title="Play Retro Pong Arcade Game"
+        class="hidden sm:flex px-2 py-1 border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--accent)] text-[var(--accent)] font-bold cursor-pointer items-center gap-1"
+      >
+        <span>🕹️</span> <span class="hidden md:inline">Pong</span>
+      </button>
+
+      <button
+        id="trigger-snake-btn"
+        title="Play Retro Snake Arcade Game"
+        class="hidden sm:flex px-2 py-1 border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--accent)] text-[var(--accent)] font-bold cursor-pointer items-center gap-1"
+      >
+        <span>🐍</span> <span class="hidden md:inline">Snake</span>
+      </button>
+
+      <button
         id="trigger-matrix-btn"
         title="Trigger Matrix Rain"
         class="px-2 py-1 border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--accent)] text-[var(--accent)] font-bold cursor-pointer"
@@ -119,6 +143,17 @@ import { ALL_THEMES } from "../config/themeConfig";
       <span class="hidden md:inline"
         >MODE: <span id="mode-status-text">CLI</span></span
       >
+    </div>
+
+    <!-- Live Status Bar Radio Ticker -->
+    <div
+      id="status-radio-ticker"
+      title="Click to toggle Lo-Fi Radio Player"
+      class="hidden md:flex items-center gap-2 cursor-pointer text-[var(--fg-bright)] hover:text-[var(--accent)] transition-colors px-2 py-0.5 border border-transparent hover:border-[var(--border-color)]"
+    >
+      <span id="status-radio-icon">📻</span>
+      <span id="status-radio-title" class="truncate max-w-[180px]">RADIO: OFF</span>
+      <span id="status-radio-meter" class="text-[var(--accent)] font-mono font-bold"></span>
     </div>
 
     <div class="flex items-center gap-4">
@@ -200,6 +235,79 @@ import { ALL_THEMES } from "../config/themeConfig";
       if (sfxIcon) sfxIcon.textContent = enabled ? "🔊" : "🔇";
       if (sfxStatus) sfxStatus.textContent = enabled ? "SFX ON" : "SFX OFF";
     }
+
+    document
+      .getElementById("trigger-radio-btn")
+      ?.addEventListener("click", () => {
+        const win = window as unknown as {
+          radioEngine?: { toggleModal: (f?: boolean) => void };
+        };
+        if (win.radioEngine) {
+          win.radioEngine.toggleModal(true);
+          playBeep(750, 0.05);
+        }
+      });
+
+    document
+      .getElementById("status-radio-ticker")
+      ?.addEventListener("click", () => {
+        const win = window as unknown as {
+          radioEngine?: { toggleModal: (f?: boolean) => void };
+        };
+        if (win.radioEngine) {
+          win.radioEngine.toggleModal(true);
+          playBeep(750, 0.05);
+        }
+      });
+
+    // Listen for live radio changes to update footer ticker
+    window.addEventListener("tui-radio-change", (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      const titleEl = document.getElementById("status-radio-title");
+      const iconEl = document.getElementById("status-radio-icon");
+      if (detail && detail.track) {
+        if (titleEl) {
+          titleEl.textContent = detail.isPlaying
+            ? `♪ ${detail.track.title.toUpperCase()}`
+            : `RADIO: PAUSED`;
+        }
+        if (iconEl) {
+          iconEl.textContent = detail.isPlaying ? "📻" : "📻";
+        }
+      }
+    });
+
+    window.addEventListener("tui-radio-viz", (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      const meterEl = document.getElementById("status-radio-meter");
+      if (meterEl && detail) {
+        meterEl.textContent = detail.isPlaying ? detail.ascii : "";
+      }
+    });
+
+    document
+      .getElementById("trigger-pong-btn")
+      ?.addEventListener("click", () => {
+        const win = window as unknown as {
+          togglePong?: (f?: boolean) => void;
+        };
+        if (win.togglePong) {
+          win.togglePong(true);
+          playBeep(880, 0.06, "triangle");
+        }
+      });
+
+    document
+      .getElementById("trigger-snake-btn")
+      ?.addEventListener("click", () => {
+        const win = window as unknown as {
+          toggleSnake?: (f?: boolean) => void;
+        };
+        if (win.toggleSnake) {
+          win.toggleSnake(true);
+          playBeep(820, 0.06, "triangle");
+        }
+      });
 
     document
       .getElementById("trigger-matrix-btn")

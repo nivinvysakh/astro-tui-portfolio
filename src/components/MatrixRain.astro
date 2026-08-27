@@ -43,10 +43,12 @@
   }
 
   function drawMatrix() {
-    if (!ctx || !canvas) return;
+    const c = ctx;
+    const cvs = canvas;
+    if (!c || !cvs) return;
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    c.fillRect(0, 0, cvs.width, cvs.height);
 
     const activeTheme = document.documentElement.getAttribute('data-theme') || 'green';
     let color = '#00ff66';
@@ -56,14 +58,14 @@
     if (activeTheme === 'mono') color = '#ffffff';
     if (activeTheme === 'cappuccino') color = '#e69a58';
 
-    ctx.fillStyle = color;
-    ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+    c.fillStyle = color;
+    c.font = `${fontSize}px 'JetBrains Mono', monospace`;
 
     for (let i = 0; i < drops.length; i++) {
       const text = characters.charAt(Math.floor(Math.random() * characters.length));
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      c.fillText(text, i * fontSize, drops[i] * fontSize);
 
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      if (drops[i] * fontSize > cvs.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
       drops[i]++;

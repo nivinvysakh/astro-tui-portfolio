@@ -1,6 +1,9 @@
 ---
 import "../styles/global.css";
 import MatrixRain from "../components/MatrixRain.astro";
+import PongGame from "../components/PongGame.astro";
+import SnakeGame from "../components/SnakeGame.astro";
+import RadioPlayer from "../components/RadioPlayer.astro";
 import { PORTFOLIO_DATA } from "../data/portfolio";
 
 interface Props {
@@ -42,6 +45,9 @@ const {
     <div class="crt-vignette"></div>
 
     <MatrixRain />
+    <PongGame />
+    <SnakeGame />
+    <RadioPlayer />
 
     <div class="w-full my-auto z-10">
       <slot />

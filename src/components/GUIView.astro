@@ -47,11 +47,38 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
           <span class="text-purple-400">🤝</span> collabs.md (Collabs)
         </a>
         <a
+          href="#gui-github"
+          class="gui-nav-item flex items-center gap-2 p-1.5 hover:bg-[var(--border-color)] text-[var(--fg-bright)] transition-colors"
+        >
+          <span class="text-sky-400">🐙</span> github.sh (GitHub Stats)
+        </a>
+        <a
           href="#gui-contact"
           class="gui-nav-item flex items-center gap-2 p-1.5 hover:bg-[var(--border-color)] text-[var(--fg-bright)] transition-colors"
         >
           <span class="text-red-400">✉️</span> contact.txt (Contact)
         </a>
+        <button
+          type="button"
+          id="gui-launch-pong"
+          class="w-full text-left gui-nav-item flex items-center gap-2 p-1.5 hover:bg-[var(--border-color)] text-[var(--accent)] font-bold transition-colors cursor-pointer border border-dashed border-[var(--border-color)] mt-1"
+        >
+          <span>🕹️</span> pong.sh (Pong Arcade)
+        </button>
+        <button
+          type="button"
+          id="gui-launch-snake"
+          class="w-full text-left gui-nav-item flex items-center gap-2 p-1.5 hover:bg-[var(--border-color)] text-emerald-400 font-bold transition-colors cursor-pointer border border-dashed border-[var(--border-color)] mt-1"
+        >
+          <span>🐍</span> snake.sh (Snake Arcade)
+        </button>
+        <button
+          type="button"
+          id="gui-launch-radio"
+          class="w-full text-left gui-nav-item flex items-center gap-2 p-1.5 hover:bg-[var(--border-color)] text-pink-400 font-bold transition-colors cursor-pointer border border-dashed border-[var(--border-color)] mt-1"
+        >
+          <span>📻</span> radio.sh (Lo-Fi Radio)
+        </button>
       </nav>
 
       <!-- Spotify Activity Widget -->
@@ -304,7 +331,69 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
         </div>
       </section>
 
-      <!-- Section 4: Contact -->
+      <!-- Section 4: Live GitHub Stats & Repositories -->
+      <section
+        id="gui-github"
+        class="border border-[var(--border-color)] bg-[var(--bg-card)] p-5 space-y-4"
+      >
+        <div
+          class="flex items-center justify-between border-b border-[var(--border-color)] pb-3"
+        >
+          <h2
+            class="text-base font-bold text-[var(--fg-bright)] flex items-center gap-2"
+          >
+            <span class="text-[var(--accent)]">></span> CAT GITHUB.SH // REPOSITORIES & METRICS
+          </h2>
+          <span class="text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            LIVE REST API
+          </span>
+        </div>
+
+        <div id="gui-gh-loading" class="text-xs text-[var(--fg-dim)] py-2 font-mono">
+          Connecting to GitHub API & caching statistics...
+        </div>
+
+        <div id="gui-gh-content" class="hidden space-y-4 font-mono">
+          <!-- Metric Counter Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="border border-[var(--border-color)] bg-[var(--bg-main)] p-3 text-center">
+              <div class="text-[10px] text-[var(--fg-dim)] font-bold">TOTAL STARS ⭐</div>
+              <div id="gui-gh-stars" class="text-lg sm:text-xl font-bold text-yellow-400 mt-1">0</div>
+            </div>
+            <div class="border border-[var(--border-color)] bg-[var(--bg-main)] p-3 text-center">
+              <div class="text-[10px] text-[var(--fg-dim)] font-bold">TOTAL FORKS 🍴</div>
+              <div id="gui-gh-forks" class="text-lg sm:text-xl font-bold text-cyan-400 mt-1">0</div>
+            </div>
+            <div class="border border-[var(--border-color)] bg-[var(--bg-main)] p-3 text-center">
+              <div class="text-[10px] text-[var(--fg-dim)] font-bold">PUBLIC REPOS 📦</div>
+              <div id="gui-gh-repos" class="text-lg sm:text-xl font-bold text-emerald-400 mt-1">0</div>
+            </div>
+            <div class="border border-[var(--border-color)] bg-[var(--bg-main)] p-3 text-center">
+              <div class="text-[10px] text-[var(--fg-dim)] font-bold">FOLLOWERS 👥</div>
+              <div id="gui-gh-followers" class="text-lg sm:text-xl font-bold text-purple-400 mt-1">0</div>
+            </div>
+          </div>
+
+          <!-- Top Languages Bar -->
+          <div class="border border-[var(--border-color)] bg-[var(--bg-main)] p-3 space-y-2">
+            <div class="text-[10px] text-[var(--fg-dim)] font-bold uppercase tracking-wider">
+              Primary Programming Languages
+            </div>
+            <div id="gui-gh-lang-list" class="flex flex-wrap gap-2 text-xs"></div>
+          </div>
+
+          <!-- Top Repositories Grid -->
+          <div class="space-y-2">
+            <div class="text-[10px] text-[var(--fg-dim)] font-bold uppercase tracking-wider">
+              Featured Repositories
+            </div>
+            <div id="gui-gh-repos-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Contact -->
       <section
         id="gui-contact"
         class="border border-[var(--border-color)] bg-[var(--bg-card)] p-5 space-y-4"
@@ -396,6 +485,7 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
   import confetti from "canvas-confetti";
   import { playSuccessSound } from "../utils/sound";
   import { PORTFOLIO_DATA } from "../data/portfolio";
+  import { fetchGitHubStats } from "../utils/github";
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("contact-form") as HTMLFormElement;
@@ -404,14 +494,74 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
       "contact-submit-btn",
     ) as HTMLButtonElement;
     const btnText = document.getElementById("btn-text");
+    const recipientEmail = PORTFOLIO_DATA.developer.email;
 
-    if (!form) return;
+    // Fetch and populate live GitHub stats
+    initGitHubStats();
 
-    form.addEventListener("submit", async (e) => {
+    async function initGitHubStats() {
+      const loadingEl = document.getElementById("gui-gh-loading");
+      const contentEl = document.getElementById("gui-gh-content");
+      const starsEl = document.getElementById("gui-gh-stars");
+      const forksEl = document.getElementById("gui-gh-forks");
+      const reposEl = document.getElementById("gui-gh-repos");
+      const followersEl = document.getElementById("gui-gh-followers");
+      const langListEl = document.getElementById("gui-gh-lang-list");
+      const reposListEl = document.getElementById("gui-gh-repos-list");
+
+      const stats = await fetchGitHubStats();
+      if (!stats) {
+        if (loadingEl) loadingEl.textContent = "GitHub metrics temporarily offline / rate-limited.";
+        return;
+      }
+
+      if (loadingEl) loadingEl.classList.add("hidden");
+      if (contentEl) contentEl.classList.remove("hidden");
+
+      if (starsEl) starsEl.textContent = String(stats.totalStars);
+      if (forksEl) forksEl.textContent = String(stats.totalForks);
+      if (reposEl) reposEl.textContent = String(stats.publicRepos);
+      if (followersEl) followersEl.textContent = String(stats.followers);
+
+      if (langListEl) {
+        langListEl.innerHTML = "";
+        stats.topLanguages.forEach((lang) => {
+          const badge = document.createElement("span");
+          badge.className = "px-2 py-1 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--fg-bright)] flex items-center gap-1.5";
+          badge.innerHTML = `<span class="text-[var(--accent)] font-bold">${lang.name}</span> <span class="text-[var(--fg-dim)] text-[10px]">(${lang.percentage}%)</span>`;
+          langListEl.appendChild(badge);
+        });
+      }
+
+      if (reposListEl) {
+        reposListEl.innerHTML = "";
+        stats.topRepos.forEach((repo) => {
+          const card = document.createElement("a");
+          card.href = repo.url;
+          card.target = "_blank";
+          card.rel = "noopener noreferrer";
+          card.className = "border border-[var(--border-color)] bg-[var(--bg-main)] p-3 hover:border-[var(--accent)] transition-all flex flex-col justify-between block group";
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between gap-2 border-b border-[var(--border-color)] pb-1.5 mb-1.5">
+                <span class="text-xs font-bold text-[var(--fg-bright)] group-hover:text-[var(--accent)] truncate">📦 ${repo.name}</span>
+                <span class="text-[10px] text-[var(--accent)] font-bold shrink-0">⭐ ${repo.stars}</span>
+              </div>
+              <p class="text-[11px] text-[var(--fg-dim)] line-clamp-2 leading-tight">${repo.description}</p>
+            </div>
+            <div class="flex items-center justify-between text-[10px] text-[var(--fg-dim)] pt-2 mt-2 border-t border-[var(--border-color)]">
+              <span class="text-emerald-400 font-bold">${repo.language}</span>
+              <span>Updated ${repo.updatedAt} ↗</span>
+            </div>
+          `;
+          reposListEl.appendChild(card);
+        });
+      }
+    }
+
+    form?.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const recipientEmail =
-        form.dataset.recipientEmail || PORTFOLIO_DATA.developer.email;
       const nameInput = document.getElementById(
         "contact-name",
       ) as HTMLInputElement;
@@ -487,6 +637,36 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
       } finally {
         if (submitBtn) submitBtn.disabled = false;
         if (btnText) btnText.textContent = "SEND PAYLOAD [ENTER]";
+      }
+    });
+
+    document.getElementById("gui-launch-pong")?.addEventListener("click", () => {
+      const win = window as unknown as {
+        togglePong?: (f?: boolean) => void;
+      };
+      if (win.togglePong) {
+        win.togglePong(true);
+        playSuccessSound();
+      }
+    });
+
+    document.getElementById("gui-launch-snake")?.addEventListener("click", () => {
+      const win = window as unknown as {
+        toggleSnake?: (f?: boolean) => void;
+      };
+      if (win.toggleSnake) {
+        win.toggleSnake(true);
+        playSuccessSound();
+      }
+    });
+
+    document.getElementById("gui-launch-radio")?.addEventListener("click", () => {
+      const win = window as unknown as {
+        radioEngine?: { toggleModal: (f?: boolean) => void };
+      };
+      if (win.radioEngine) {
+        win.radioEngine.toggleModal(true);
+        playSuccessSound();
       }
     });
   });

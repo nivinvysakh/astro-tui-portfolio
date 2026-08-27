@@ -311,6 +311,31 @@ Execution --> bash -c`,
       usage: "theme <green|amber|cyan|dracula|mono>",
     },
     {
+      name: "pong",
+      desc: "Play retro 1972 arcade Pong mini-game vs CPU",
+      usage: "pong [or game, play, ./pong.sh]",
+    },
+    {
+      name: "snake",
+      desc: "Play classic retro Snake arcade mini-game",
+      usage: "snake [or playsnake, ./snake.sh]",
+    },
+    {
+      name: "github",
+      desc: "Display live GitHub stats, stars, forks, and language metrics",
+      usage: "github [or gh, stats]",
+    },
+    {
+      name: "repos",
+      desc: "List featured GitHub repositories with star counts and links",
+      usage: "repos [or projects]",
+    },
+    {
+      name: "radio",
+      desc: "Play retro Lo-Fi/Chiptune radio or stream custom songs from YouTube",
+      usage: "radio [play|pause|next|add <url>|vol <n>|list]",
+    },
+    {
       name: "matrix",
       desc: "Toggle digital rain CRT overlay animation",
       usage: "matrix",

@@ -264,7 +264,6 @@ const progressPercent = Math.min(
     // Instant Real-Time WebSocket & Polling Connection via Lanyard API
     if (lanyardId) {
       let heartbeatInterval: any = null;
-      let ws: WebSocket | null = null;
 
       function updateSpotifyData(s: any) {
         if (!s) {
@@ -308,9 +307,9 @@ const progressPercent = Math.min(
 
       function connectLanyardWS() {
         try {
-          ws = new WebSocket("wss://api.lanyard.rest/socket");
+          const socket = new WebSocket("wss://api.lanyard.rest/socket");
 
-          ws.onmessage = (event) => {
+          socket.onmessage = (event) => {
             try {
               const msg = JSON.parse(event.data);
               const { op, d, t } = msg;
@@ -319,17 +318,19 @@ const progressPercent = Math.min(
                 const period = d.heartbeat_interval || 30000;
                 if (heartbeatInterval) clearInterval(heartbeatInterval);
                 heartbeatInterval = setInterval(() => {
-                  if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({ op: 3 }));
+                  if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({ op: 3 }));
                   }
                 }, period);
 
-                ws.send(
-                  JSON.stringify({
-                    op: 2,
-                    d: { subscribe_to_id: lanyardId },
-                  })
-                );
+                if (socket.readyState === WebSocket.OPEN) {
+                  socket.send(
+                    JSON.stringify({
+                      op: 2,
+                      d: { subscribe_to_id: lanyardId },
+                    })
+                  );
+                }
               } else if (op === 0 && (t === "INIT_STATE" || t === "PRESENCE_UPDATE")) {
                 const spotify = d.spotify || (d[lanyardId]?.spotify);
                 updateSpotifyData(spotify);
@@ -337,7 +338,7 @@ const progressPercent = Math.min(
             } catch {}
           };
 
-          ws.onclose = () => {
+          socket.onclose = () => {
             if (heartbeatInterval) clearInterval(heartbeatInterval);
             setTimeout(connectLanyardWS, 3000);
           };

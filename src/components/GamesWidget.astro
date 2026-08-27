@@ -1,5 +1,5 @@
 ---
-import { GAMES_CONFIG, getLiveGameActivity, parseGameAsset, fetchGameIconByName } from "../config/gamesConfig";
+import { GAMES_CONFIG, getLiveGameActivity } from "../config/gamesConfig";
 
 const liveGame = await getLiveGameActivity();
 
@@ -102,8 +102,6 @@ const isLive = Boolean(liveGame && liveGame.isPlaying);
     const artEl = document.getElementById("game-art") as HTMLImageElement;
     const artPlaceholderEl = document.getElementById("game-art-placeholder");
     const elapsedEl = document.getElementById("game-elapsed-time");
-    const rpcBadgeEl = document.getElementById("game-rpc-badge");
-    const rpcIconEl = document.getElementById("game-rpc-icon");
 
     function formatElapsed(ms: number): string {
       const totalSecs = Math.floor(ms / 1000);
@@ -153,17 +151,16 @@ const isLive = Boolean(liveGame && liveGame.isPlaying);
     // Real-Time WebSocket & Polling Connection via Lanyard API
     if (lanyardId) {
       let heartbeatInterval: any = null;
-      let ws: WebSocket | null = null;
 
       async function updateGameData(game: any) {
         if (!game) {
           isLive = false;
-          widget.classList.add("hidden");
+          widget?.classList.add("hidden");
           return;
         }
 
         isLive = true;
-        widget.classList.remove("hidden");
+        widget?.classList.remove("hidden");
 
         const now = Date.now();
         startTimestamp = game.timestamps?.start || now;
@@ -188,9 +185,9 @@ const isLive = Boolean(liveGame && liveGame.isPlaying);
 
       function connectLanyardWS() {
         try {
-          ws = new WebSocket("wss://api.lanyard.rest/socket");
+          const socket = new WebSocket("wss://api.lanyard.rest/socket");
 
-          ws.onmessage = (event) => {
+          socket.onmessage = (event) => {
             try {
               const msg = JSON.parse(event.data);
               const { op, d, t } = msg;
@@ -199,17 +196,19 @@ const isLive = Boolean(liveGame && liveGame.isPlaying);
                 const period = d.heartbeat_interval || 30000;
                 if (heartbeatInterval) clearInterval(heartbeatInterval);
                 heartbeatInterval = setInterval(() => {
-                  if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({ op: 3 }));
+                  if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({ op: 3 }));
                   }
                 }, period);
 
-                ws.send(
-                  JSON.stringify({
-                    op: 2,
-                    d: { subscribe_to_id: lanyardId },
-                  })
-                );
+                if (socket.readyState === WebSocket.OPEN) {
+                  socket.send(
+                    JSON.stringify({
+                      op: 2,
+                      d: { subscribe_to_id: lanyardId },
+                    })
+                  );
+                }
               } else if (op === 0 && (t === "INIT_STATE" || t === "PRESENCE_UPDATE")) {
                 const userObj = d[lanyardId] || d;
                 const game = extractGameActivity(userObj.activities || []);
@@ -218,7 +217,7 @@ const isLive = Boolean(liveGame && liveGame.isPlaying);
             } catch {}
           };
 
-          ws.onclose = () => {
+          socket.onclose = () => {
             if (heartbeatInterval) clearInterval(heartbeatInterval);
             setTimeout(connectLanyardWS, 3000);
           };

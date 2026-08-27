@@ -45,13 +45,14 @@ export function playKeypressSound(): void {
   if (!sfxEnabled) return;
   const ctx = getAudioContext();
   if (!ctx) return;
+  const audio = ctx;
 
   try {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
 
     osc.type = 'triangle';
-    const now = ctx.currentTime;
+    const now = audio.currentTime;
     const freq = 120 + Math.random() * 40;
     osc.frequency.setValueAtTime(freq, now);
     osc.frequency.exponentialRampToValueAtTime(30, now + 0.015);
@@ -60,7 +61,7 @@ export function playKeypressSound(): void {
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
 
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(audio.destination);
 
     osc.start(now);
     osc.stop(now + 0.015);
@@ -71,12 +72,13 @@ export function playBeep(freq: number = 440, duration: number = 0.08, type: Osci
   if (!sfxEnabled) return;
   const ctx = getAudioContext();
   if (!ctx) return;
+  const audio = ctx;
 
   try {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
 
-    const now = ctx.currentTime;
+    const now = audio.currentTime;
     osc.type = type;
     osc.frequency.setValueAtTime(freq, now);
 
@@ -84,7 +86,7 @@ export function playBeep(freq: number = 440, duration: number = 0.08, type: Osci
     gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(audio.destination);
 
     osc.start(now);
     osc.stop(now + duration);
@@ -95,18 +97,19 @@ export function playSuccessSound(): void {
   if (!sfxEnabled) return;
   const ctx = getAudioContext();
   if (!ctx) return;
+  const audio = ctx;
 
   try {
-    const now = ctx.currentTime;
+    const now = audio.currentTime;
     [523.25, 659.25, 783.99].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, now + idx * 0.04);
       gain.gain.setValueAtTime(0.03, now + idx * 0.04);
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.1);
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(audio.destination);
       osc.start(now + idx * 0.04);
       osc.stop(now + idx * 0.04 + 0.1);
     });
@@ -117,18 +120,19 @@ export function playErrorSound(): void {
   if (!sfxEnabled) return;
   const ctx = getAudioContext();
   if (!ctx) return;
+  const audio = ctx;
 
   try {
-    const now = ctx.currentTime;
+    const now = audio.currentTime;
     [220, 180].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(freq, now + idx * 0.07);
       gain.gain.setValueAtTime(0.04, now + idx * 0.07);
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.06);
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(audio.destination);
       osc.start(now + idx * 0.07);
       osc.stop(now + idx * 0.07 + 0.06);
     });
