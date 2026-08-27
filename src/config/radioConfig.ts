@@ -60,7 +60,7 @@ export const RADIO_PLAYLIST: RadioTrack[] = [
 ];
 
 export const RADIO_CONFIG: RadioConfig = {
-  defaultVolume: 0.65,
+  defaultVolume: 1.0,
   autoPlay: false,
   tracks: RADIO_PLAYLIST,
 };
