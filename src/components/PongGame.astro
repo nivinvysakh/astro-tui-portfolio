@@ -4,30 +4,30 @@
 
 <div
   id="pong-modal-container"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-3 sm:p-6 hidden select-none"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-2 sm:p-6 hidden select-none overflow-y-auto py-4 sm:py-6"
 >
   <div
     id="pong-game-window"
-    class="w-full max-w-2xl border-2 border-[var(--border-active)] bg-[var(--bg-main)] shadow-2xl relative font-mono text-[var(--fg-main)] flex flex-col"
+    class="w-full max-w-2xl max-h-[94vh] sm:max-h-[90vh] border-2 border-[var(--border-active)] bg-[var(--bg-main)] shadow-2xl relative font-mono text-[var(--fg-main)] flex flex-col my-auto overflow-hidden rounded-sm"
   >
     <!-- Retro Window Title Bar -->
     <div
-      class="bg-[var(--status-bar-bg)] border-b border-[var(--border-color)] px-3 py-2 flex items-center justify-between"
+      class="bg-[var(--status-bar-bg)] border-b border-[var(--border-color)] px-3 py-2 flex items-center justify-between shrink-0"
     >
-      <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full bg-red-500 inline-block border border-red-700 cursor-pointer" id="pong-win-close"></span>
-        <span class="w-3 h-3 rounded-full bg-yellow-500/50 inline-block border border-yellow-700"></span>
-        <span class="w-3 h-3 rounded-full bg-emerald-500/50 inline-block border border-emerald-700"></span>
-        <span class="font-bold text-xs text-[var(--fg-bright)] ml-1 flex items-center gap-1.5">
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span class="w-3 h-3 rounded-full bg-red-500 inline-block border border-red-700 cursor-pointer shrink-0" id="pong-win-close"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500/50 inline-block border border-yellow-700 shrink-0"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-500/50 inline-block border border-emerald-700 shrink-0"></span>
+        <span class="font-bold text-[11px] sm:text-xs text-[var(--fg-bright)] ml-1 flex items-center gap-1.5 truncate">
           <span>🕹️</span> PONG.EXE [RETRO ARCADE v1.0]
         </span>
       </div>
 
-      <div class="flex items-center gap-3 text-xs">
+      <div class="flex items-center gap-2 sm:gap-3 text-xs shrink-0 ml-2">
         <span class="text-[var(--fg-dim)] hidden sm:inline">First to 5 wins</span>
         <button
           id="pong-close-btn"
-          class="px-2 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-red-500 hover:text-red-400 text-xs font-bold transition-colors cursor-pointer"
+          class="px-2 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-red-500 hover:text-red-400 text-[10px] sm:text-xs font-bold transition-colors cursor-pointer"
         >
           ✕ CLOSE [ESC]
         </button>
@@ -36,15 +36,15 @@
 
     <!-- Scoreboard HUD -->
     <div
-      class="bg-[var(--bg-card)] border-b border-[var(--border-color)] px-4 py-2 flex items-center justify-between text-xs"
+      class="bg-[var(--bg-card)] border-b border-[var(--border-color)] px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between text-xs shrink-0"
     >
-      <div class="flex items-center gap-2">
-        <span class="text-[var(--accent)] font-bold">YOU (P1):</span>
-        <span id="pong-score-p1" class="text-base font-bold text-[var(--fg-bright)]">0</span>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <span class="text-[var(--accent)] font-bold text-[11px] sm:text-xs">YOU (P1):</span>
+        <span id="pong-score-p1" class="text-sm sm:text-base font-bold text-[var(--fg-bright)]">0</span>
       </div>
 
-      <div class="flex items-center gap-4">
-        <div class="text-[11px] text-[var(--fg-dim)]">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div class="text-[10px] sm:text-[11px] text-[var(--fg-dim)]">
           HIGH SCORE: <span id="pong-high-score" class="font-bold text-[var(--fg-bright)]">0</span>
         </div>
         <div class="text-[11px] text-[var(--fg-dim)] hidden sm:block">
@@ -52,37 +52,37 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <span id="pong-score-cpu" class="text-base font-bold text-[var(--fg-bright)]">0</span>
-        <span class="text-red-400 font-bold">:CPU (AI)</span>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <span id="pong-score-cpu" class="text-sm sm:text-base font-bold text-[var(--fg-bright)]">0</span>
+        <span class="text-red-400 font-bold text-[11px] sm:text-xs">:CPU (AI)</span>
       </div>
     </div>
 
     <!-- Main Canvas Area -->
-    <div class="relative bg-black flex items-center justify-center overflow-hidden">
+    <div class="relative bg-black flex items-center justify-center overflow-hidden flex-1">
       <canvas
         id="pong-canvas"
         width="640"
         height="380"
-        class="w-full h-auto block max-h-[55vh] sm:max-h-[60vh] cursor-none"
+        class="w-full h-auto block max-h-[45vh] sm:max-h-[60vh] cursor-none"
       ></canvas>
 
       <!-- Interactive Overlay Message / Menu -->
       <div
         id="pong-overlay-msg"
-        class="absolute inset-0 flex flex-col items-center justify-center bg-black/75 p-4 text-center"
+        class="absolute inset-0 flex flex-col items-center justify-center bg-black/75 p-3 sm:p-4 text-center"
       >
-        <div id="pong-overlay-title" class="text-lg sm:text-xl font-bold text-[var(--accent)] mb-2 tracking-wider">
+        <div id="pong-overlay-title" class="text-base sm:text-xl font-bold text-[var(--accent)] mb-1.5 sm:mb-2 tracking-wider">
           RETRO PONG
         </div>
-        <p id="pong-overlay-desc" class="text-xs sm:text-sm text-[var(--fg-bright)] mb-4 max-w-sm">
-          Use <span class="text-[var(--accent)] font-bold">W / S</span> or <span class="text-[var(--accent)] font-bold">↑ / ↓</span> arrows (or Mouse) to move your paddle.
+        <p id="pong-overlay-desc" class="text-[11px] sm:text-sm text-[var(--fg-bright)] mb-3 sm:mb-4 max-w-sm px-2">
+          Use <span class="text-[var(--accent)] font-bold">Touch D-Pad</span> or <span class="text-[var(--accent)] font-bold">W/S Keys</span> to move paddle.
         </p>
         <button
           id="pong-start-btn"
-          class="px-5 py-2 border-2 border-[var(--accent)] bg-[var(--bg-card)] hover:bg-[var(--border-color)] text-[var(--fg-bright)] font-bold text-sm tracking-wider transition-transform active:scale-95 cursor-pointer shadow-[0_0_15px_var(--glow-color)]"
+          class="px-4 sm:px-5 py-1.5 sm:py-2 border-2 border-[var(--accent)] bg-[var(--bg-card)] hover:bg-[var(--border-color)] text-[var(--fg-bright)] font-bold text-xs sm:text-sm tracking-wider transition-transform active:scale-95 cursor-pointer shadow-[0_0_15px_var(--glow-color)]"
         >
-          ▶ PRESS SPACE OR CLICK TO PLAY
+          ▶ TAP TO PLAY
         </button>
       </div>
     </div>
@@ -105,15 +105,24 @@
 
     <!-- Footer Controls Reference Bar -->
     <div
-      class="bg-[var(--status-bar-bg)] border-t border-[var(--border-color)] px-3 py-1.5 flex flex-wrap items-center justify-between text-[10px] text-[var(--fg-dim)]"
+      class="bg-[var(--status-bar-bg)] border-t border-[var(--border-color)] px-3 py-1.5 text-[10px] text-[var(--fg-dim)] shrink-0"
     >
-      <div class="flex items-center gap-3">
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">W</kbd> / <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">S</kbd> or <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">↑</kbd> <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">↓</kbd> Move</span>
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">Space</kbd> Serve / Pause</span>
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">R</kbd> Restart</span>
+      <!-- Desktop Shortcuts -->
+      <div class="hidden sm:flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">W</kbd> / <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">S</kbd> or <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">↑</kbd> <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">↓</kbd> Move</span>
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">Space</kbd> Serve / Pause</span>
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">R</kbd> Restart</span>
+        </div>
+        <div>
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">ESC</kbd> / <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">Q</kbd> Exit</span>
+        </div>
       </div>
-      <div>
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">ESC</kbd> / <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">Q</kbd> Exit</span>
+
+      <!-- Mobile Hint -->
+      <div class="flex sm:hidden items-center justify-between font-mono text-[9px]">
+        <span>📱 Touch UP/DOWN or Drag to Move</span>
+        <span>Tap <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">CLOSE ✕</kbd> to Exit</span>
       </div>
     </div>
   </div>
@@ -520,13 +529,18 @@
 
     closeBtn?.addEventListener("click", () => togglePong(false));
     winCloseBtn?.addEventListener("click", () => togglePong(false));
-    startBtn?.addEventListener("click", () => {
+
+    const handlePongStart = (e?: Event) => {
+      if (e) e.preventDefault();
       if (isPaused) {
         pauseGame();
       } else {
         startGame();
       }
-    });
+    };
+
+    startBtn?.addEventListener("click", handlePongStart);
+    startBtn?.addEventListener("touchstart", handlePongStart, { passive: false });
 
     // Close on background backdrop click
     modal?.addEventListener("click", (e) => {
@@ -545,32 +559,30 @@
       playerY = Math.max(5, Math.min(canvas.height - PADDLE_HEIGHT - 5, mouseY * scaleY - PADDLE_HEIGHT / 2));
     });
 
-    pongCanvas?.addEventListener("click", () => {
-      if (!isPlaying) {
-        startGame();
-      } else if (isPaused) {
-        pauseGame();
-      }
-    });
+    pongCanvas?.addEventListener("click", handlePongStart);
 
     // Mobile On-screen Touch Controls
     const touchUp = document.getElementById("pong-touch-up");
     const touchDown = document.getElementById("pong-touch-down");
 
-    touchUp?.addEventListener("touchstart", (e) => {
+    const setUpState = (e: Event, isDown: boolean) => {
       e.preventDefault();
-      keys.up = true;
-    });
-    touchUp?.addEventListener("touchend", () => {
-      keys.up = false;
-    });
-    touchDown?.addEventListener("touchstart", (e) => {
+      keys.up = isDown;
+    };
+    const setDownState = (e: Event, isDown: boolean) => {
       e.preventDefault();
-      keys.down = true;
-    });
-    touchDown?.addEventListener("touchend", () => {
-      keys.down = false;
-    });
+      keys.down = isDown;
+    };
+
+    touchUp?.addEventListener("touchstart", (e) => setUpState(e, true), { passive: false });
+    touchUp?.addEventListener("pointerdown", (e) => setUpState(e, true));
+    touchUp?.addEventListener("touchend", (e) => setUpState(e, false));
+    touchUp?.addEventListener("pointerup", (e) => setUpState(e, false));
+
+    touchDown?.addEventListener("touchstart", (e) => setDownState(e, true), { passive: false });
+    touchDown?.addEventListener("pointerdown", (e) => setDownState(e, true));
+    touchDown?.addEventListener("touchend", (e) => setDownState(e, false));
+    touchDown?.addEventListener("pointerup", (e) => setDownState(e, false));
 
     // Touch drag on canvas for mobile
     pongCanvas?.addEventListener("touchmove", (e) => {

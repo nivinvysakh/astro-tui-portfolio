@@ -4,11 +4,11 @@
 
 <div
   id="snake-modal-container"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-3 sm:p-6 hidden select-none"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-2 sm:p-6 hidden select-none overflow-y-auto py-4 sm:py-6"
 >
   <div
     id="snake-game-window"
-    class="w-full max-w-lg border-2 border-[var(--border-active)] bg-[var(--bg-main)] shadow-2xl relative font-mono text-[var(--fg-main)] flex flex-col"
+    class="w-full max-w-lg max-h-[94vh] sm:max-h-[90vh] border-2 border-[var(--border-active)] bg-[var(--bg-main)] shadow-2xl relative font-mono text-[var(--fg-main)] flex flex-col my-auto overflow-hidden rounded-sm"
   >
     <!-- Retro Window Title Bar -->
     <div
@@ -86,9 +86,9 @@
         </p>
         <button
           id="snake-start-btn"
-          class="px-5 py-2 border-2 border-[var(--accent)] bg-[var(--bg-card)] hover:bg-[var(--border-color)] text-[var(--fg-bright)] font-bold text-xs sm:text-sm tracking-wider transition-transform active:scale-95 cursor-pointer shadow-[0_0_15px_var(--glow-color)]"
+          class="px-4 sm:px-5 py-1.5 sm:py-2 border-2 border-[var(--accent)] bg-[var(--bg-card)] hover:bg-[var(--border-color)] text-[var(--fg-bright)] font-bold text-xs sm:text-sm tracking-wider transition-transform active:scale-95 cursor-pointer shadow-[0_0_15px_var(--glow-color)]"
         >
-          ▶ PRESS SPACE OR CLICK TO PLAY
+          ▶ TAP TO PLAY
         </button>
       </div>
     </div>
@@ -127,15 +127,24 @@
 
     <!-- Footer Controls Reference Bar -->
     <div
-      class="bg-[var(--status-bar-bg)] border-t border-[var(--border-color)] px-3 py-1.5 flex flex-wrap items-center justify-between text-[10px] text-[var(--fg-dim)]"
+      class="bg-[var(--status-bar-bg)] border-t border-[var(--border-color)] px-3 py-1.5 text-[10px] text-[var(--fg-dim)] shrink-0"
     >
-      <div class="flex items-center gap-3">
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">W/A/S/D</kbd> or <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">↑←↓→</kbd> Steer</span>
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">Space</kbd> Pause</span>
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">R</kbd> Restart</span>
+      <!-- Desktop Shortcuts -->
+      <div class="hidden sm:flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">W/A/S/D</kbd> or <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">↑←↓→</kbd> Steer</span>
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">Space</kbd> Pause</span>
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">R</kbd> Restart</span>
+        </div>
+        <div>
+          <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">ESC</kbd> Close</span>
+        </div>
       </div>
-      <div>
-        <span><kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">ESC</kbd> Close</span>
+
+      <!-- Mobile Hint -->
+      <div class="flex sm:hidden items-center justify-between font-mono text-[9px]">
+        <span>📱 Touch D-Pad to Steer</span>
+        <span>Tap <kbd class="px-1 py-0.5 border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--fg-bright)]">CLOSE ✕</kbd> to Exit</span>
       </div>
     </div>
   </div>
@@ -451,24 +460,35 @@
 
     closeBtn?.addEventListener("click", () => toggleSnake(false));
     winCloseBtn?.addEventListener("click", () => toggleSnake(false));
-    startBtn?.addEventListener("click", () => {
+    
+    const handleStart = (e?: Event) => {
+      if (e) e.preventDefault();
       if (isPaused) pauseGame();
       else startGame();
-    });
+    };
 
-    // Mobile D-Pad Touch Buttons
-    document.getElementById("snake-touch-up")?.addEventListener("click", () => {
-      if (dir.y === 0) nextDir = { x: 0, y: -1 };
-    });
-    document.getElementById("snake-touch-down")?.addEventListener("click", () => {
-      if (dir.y === 0) nextDir = { x: 0, y: 1 };
-    });
-    document.getElementById("snake-touch-left")?.addEventListener("click", () => {
-      if (dir.x === 0) nextDir = { x: -1, y: 0 };
-    });
-    document.getElementById("snake-touch-right")?.addEventListener("click", () => {
-      if (dir.x === 0) nextDir = { x: 1, y: 0 };
-    });
+    startBtn?.addEventListener("click", handleStart);
+    startBtn?.addEventListener("touchstart", handleStart, { passive: false });
+
+    // Mobile D-Pad Touch Buttons (Zero-latency touchstart + click)
+    const bindTouchDir = (id: string, newDir: Point) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const handler = (e: Event) => {
+        e.preventDefault();
+        if ((newDir.x !== 0 && dir.x === 0) || (newDir.y !== 0 && dir.y === 0)) {
+          nextDir = newDir;
+        }
+      };
+      el.addEventListener("touchstart", handler, { passive: false });
+      el.addEventListener("pointerdown", handler);
+      el.addEventListener("click", handler);
+    };
+
+    bindTouchDir("snake-touch-up", { x: 0, y: -1 });
+    bindTouchDir("snake-touch-down", { x: 0, y: 1 });
+    bindTouchDir("snake-touch-left", { x: -1, y: 0 });
+    bindTouchDir("snake-touch-right", { x: 1, y: 0 });
 
     // Modal background click
     modal?.addEventListener("click", (e) => {
