@@ -310,8 +310,13 @@
           const cur = ytPlayer.getCurrentTime ? ytPlayer.getCurrentTime() : 0;
           const dur = ytPlayer.getDuration ? ytPlayer.getDuration() : 0;
           const timeEl = document.getElementById("radio-time-display");
+          const track = allTracks[currentTrackIdx];
           if (timeEl) {
-            timeEl.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+            if (track?.duration === "LIVE" || dur > 86400 || dur <= 0 || !isFinite(dur)) {
+              timeEl.textContent = "00:00 / ∞";
+            } else {
+              timeEl.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+            }
           }
         } catch {}
       }
@@ -722,6 +727,15 @@
     if (artistEl) artistEl.textContent = track.artist;
     if (genreEl) genreEl.textContent = track.genre.toUpperCase();
 
+    const timeEl = document.getElementById("radio-time-display");
+    if (timeEl) {
+      if (track.duration === "LIVE") {
+        timeEl.textContent = "00:00 / ∞";
+      } else {
+        timeEl.textContent = "0:00 / 0:00";
+      }
+    }
+
     // Highlight row in tracklist
     const rows = document.querySelectorAll(".radio-track-row");
     rows.forEach((row, idx) => {
@@ -734,7 +748,7 @@
   }
 
   function formatTime(secs: number): string {
-    if (isNaN(secs) || secs < 0) return "0:00";
+    if (isNaN(secs) || secs < 0 || !isFinite(secs)) return "0:00";
     const mins = Math.floor(secs / 60);
     const remainder = Math.floor(secs % 60);
     return `${mins}:${remainder < 10 ? "0" : ""}${remainder}`;
@@ -743,8 +757,13 @@
   function updateTimeDisplay() {
     if (!audioEl) return;
     const timeEl = document.getElementById("radio-time-display");
+    const track = allTracks[currentTrackIdx];
     if (timeEl) {
-      timeEl.textContent = `${formatTime(audioEl.currentTime)} / ${formatTime(audioEl.duration)}`;
+      if (track?.duration === "LIVE" || isNaN(audioEl.duration) || !isFinite(audioEl.duration)) {
+        timeEl.textContent = "00:00 / ∞";
+      } else {
+        timeEl.textContent = `${formatTime(audioEl.currentTime)} / ${formatTime(audioEl.duration)}`;
+      }
     }
   }
 
