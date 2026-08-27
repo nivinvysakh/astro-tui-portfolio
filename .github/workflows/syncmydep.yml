@@ -1,12 +1,17 @@
-name: Dependency Sync & Audit
+name: Sync Dependencies & Fix Vulnerabilities
 
 on:
   schedule:
-    - cron: '0 8 * * 1' # Runs every Monday at 08:00 UTC
-  workflow_dispatch:     # Allows manual trigger from GitHub UI
+    # Run weekly on Monday at 08:00 UTC
+    - cron: "0 8 * * 1"
+  workflow_dispatch: # Allows manual one-click trigger
   push:
     paths:
-      - 'package.json'
+      - "package.json"
+      - ".syncmydep.yml"
+      - "pnpm-workspace.yaml"
+      - "bun.lock"
+      - "deno.json"
     branches:
       - main
 
@@ -16,27 +21,23 @@ permissions:
   issues: write
 
 jobs:
-  sync:
+  sync-dependencies:
+    name: Sync Dependencies & Open PR
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 20
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Run SyncMyDep
-        uses: nivinvysakh/syncmydep@main
+        uses: nivinvysakh/syncmydep@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: 'auto'
-          sync-lockfile: 'true'
-          fix-audit: 'true'
-          audit-level: 'moderate'
-          pr-branch: 'syncmydep/dependency-fix'
-          pr-title: 'chore(deps): synchronize package.json and lockfile'
-          pr-labels: 'dependencies, automated-pr'
+          github-token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          # Optional settings (can also be defined in .syncmydep.yml):
+          # sync-lockfile: "true"
+          # fix-audit: "true"
+          # verify-lockfile: "true"
+          # auto-merge: "false"
