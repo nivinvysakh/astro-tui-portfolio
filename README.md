@@ -54,22 +54,22 @@ Switch between **6 built-in CRT themes** in real-time via the header dropdown or
 
 | **🟢 Phosphor Green** | **🟠 Amber CRT** |
 | :---: | :---: |
-| ![Phosphor Green](/themes/Phosphor_Green.png) | ![Amber Monitor](/themes/Amber_CRT.png) |
+| ![Phosphor Green](themes/Phosphor_Green.png) | ![Amber Monitor](themes/Amber_CRT.png) |
 
 | **🔵 Cyber Cyan** | **🟣 Dracula Synth** |
 | :---: | :---: |
-| ![Cyber Cyan](/themes/Cyber_Cyan.png) | ![Dracula Synth](/themes/Dracula_Synth.png) |
+| ![Cyber Cyan](themes/Cyber_Cyan.png) | ![Dracula Synth](themes/Dracula_Synth.png) |
 
 | **⚪ Monochrome** | **☕ Cappuccino** |
 | :---: | :---: |
-| ![Retro Monochrome](/themes/Monochrome.png) | ![Cappuccino Theme](/themes/Cappuccino.png) |
+| ![Retro Monochrome](themes/Monochrome.png) | ![Cappuccino Theme](themes/Cappuccino.png) |
 
 <p align="center">
   <em>Includes a custom retro 404 terminal error screen:</em>
 </p>
 
 <div align="center">
-  <img src="/themes/404.png" alt="404 Terminal Page" width="70%" />
+  <img src="themes/404.png" alt="404 Terminal Page" width="70%" />
 </div>
 
 ---
@@ -82,7 +82,7 @@ An interactive retro cassette tape player with real-time Web Audio API spectrum 
 - **Custom Song Streaming**: Stream any song or live radio from YouTube by pasting the video URL into the player or executing `radio add <url>` in CLI.
 - **Infinite Live Duration**: Displays `00:00 / ∞` for 24/7 live stream stations.
 
-<div align="center"><img src="/themes/Radio.png" alt="Retro Radio Player" width="50%" /></div>
+<div align="center"><img src="themes/radio.png" alt="Retro Radio Player" width="50%" /></div>
 
 ---
 
@@ -94,7 +94,7 @@ A classic 60 FPS HTML5 Canvas Snake arcade mini-game built right into the termin
 - **High Scores**: Persistent high-score tracking stored in browser `localStorage`.
 
 
-<div align="center"><img src="/themes/Snake.png" alt="Retro Snake Game" width="70%" /></div>
+<div align="center"><img src="themes/Snake.png" alt="Retro Snake Game" width="70%" /></div>
 
 ---
 
@@ -105,7 +105,7 @@ A 1972-style 60 FPS HTML5 Canvas Pong arcade mini-game vs CPU AI:
 - **Rally & Score Counter**: Real-time rally counter and persistent high-score tracking.
 
 
-<div align="center"><img src="/themes/Pong.png" alt="Retro Pong Game" width="80%" /></div>
+<div align="center"><img src="themes/Pong.png" alt="Retro Pong Game" width="80%" /></div>
 
 ---
 
@@ -116,7 +116,7 @@ Real-time integration with the GitHub REST API:
 - **Language Breakdown**: Displays primary programming languages across all public repositories.
 - **Featured Repositories Grid**: Interactive cards displaying repository stars, description, and direct links.
 
-<div align="center"><img src="/themes/Github.png" alt="Live GitHub Stats & Repositories" width="80%" /></div>
+<div align="center"><img src="themes/Github%20GUI.png" alt="Live GitHub Stats & Repositories" width="80%" /></div>
 
 ### 🖥️ GitHub CLI Integration (`github` / `repos`)
 
@@ -124,7 +124,7 @@ Access live GitHub metrics and featured repositories directly inside the termina
 - **CLI Commands**: Execute `github` (or `gh` / `stats`) to view live profile metrics, or `repos` (or `projects`) to browse top repositories.
 - **Interactive Terminal Cards**: Formatted terminal output displaying repository stars, forks, language badges, and direct links.
 
-<div align="center"><img src="/themes/Github CLI.png" alt="GitHub CLI Integration" width="80%" /></div>
+<div align="center"><img src="themes/Github%20CLI.png" alt="GitHub CLI Integration" width="80%" /></div>
 
 ---
 
