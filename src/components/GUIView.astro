@@ -644,7 +644,7 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
       const el = document.getElementById(id);
       if (!el) return;
       let lastTrigger = 0;
-      const handler = (e: Event) => {
+      const handler = () => {
         const now = Date.now();
         if (now - lastTrigger < 300) return; // Prevent double trigger
         lastTrigger = now;
@@ -653,7 +653,7 @@ const { developer, skills, collabs } = PORTFOLIO_DATA;
       el.addEventListener("click", handler);
       el.addEventListener("touchstart", (e) => {
         e.preventDefault();
-        handler(e);
+        handler();
       }, { passive: false });
     };
 
