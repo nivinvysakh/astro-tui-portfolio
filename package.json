@@ -9,7 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.8",
+    "astro": "^7.2.9",
     "canvas-confetti": "1.9.4"
   },
   "devDependencies": {
