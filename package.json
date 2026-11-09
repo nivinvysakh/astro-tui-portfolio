@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@tailwindcss/vite": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.4",
     "@types/canvas-confetti": "1.9.0",
     "@types/node": "^26.6.6",
     "tailwindcss": "^4.3.4",
